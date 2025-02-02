@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💌 Para Ti ADMV 🩵</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #d9f2ff, #b3e0ff);
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 0;
+            overflow: hidden;
+        }
+        .container {
+            margin-top: 5%;
+        }
+        h1 {
+            color: #0077b6;
+            font-size: 28px;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+        }
+        .letter {
+            width: 200px;
+            height: 150px;
+            background: white;
+            border-radius: 10px;
+            margin: 20px auto;
+            cursor: pointer;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        .flap {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 50%;
+            background: #0077b6;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            transform-origin: top;
+            transition: transform 0.5s ease-in-out;
+        }
+        .game {
+            display: none;
+            margin-top: 20px;
+        }
+        .heart {
+            position: absolute;
+            font-size: 30px;
+            animation: float 3s linear infinite;
+        }
+        .buttons {
+            margin-top: 15px;
+        }
+        button {
+            background-color: #0077b6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 10px;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #005f8a;
+        }
+        #noBtn {
+            position: absolute;
+        }
+        @keyframes float {
+            from { top: 100vh; }
+            to { top: -10vh; }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="music" loop>
+        <source src="https://www.dropbox.com/scl/fi/0q1y8m3sxzpq9m0yovhwl/Perfect-Ed-Sheeran.mp3?rlkey=aftvl96s5xrclwcbh0bgdcwod&dl=1" type="audio/mp3">
+    </audio>
+
+    <div class="container">
+        <h1>💌 Tienes una carta especial 💌</h1>
+        <div class="letter" onclick="openLetter()">
+            <div class="flap"></div>
+        </div>
+
+        <div id="game" class="game">
+            <h2>¡Atrapa 22 corazones para desbloquear la sorpresa! 🩵</h2>
+            <p id="score">0/22</p>
+        </div>
+
+        <div id="question" class="message" style="display: none;">
+            <h2>💖 ¿Quieres ser mi San Valentín? 💖</h2>
+            <div class="buttons">
+                <button onclick="accept()">Sí 🩵</button>
+                <button id="noBtn" onmouseover="moveNo()">No 💔</button>
+            </div>
+        </div>
+
+        <div id="finalMessage" class="message" style="display: none;">
+            <h2>💙 ¡LO SABÍA!!! TE AMO MUCHO ADMV 🩵 💙</h2>
+        </div>
+    </div>
+
+    <script>
+        let score = 0;
+        const heartsNeeded = 22;
+
+        function openLetter() {
+            document.querySelector('.flap').style.transform = "rotateX(180deg)";
+            document.getElementById('music').play(); // Música empieza al abrir la carta
+            setTimeout(() => {
+                document.getElementById('game').style.display = "block";
+                startGame();
+            }, 500);
+        }
+
+        function startGame() {
+            for (let i = 0; i < 30; i++) { // Generamos más corazones
+                createHeart();
+            }
+        }
+
+        function createHeart() {
+            let heart = document.createElement("div");
+            heart.innerHTML = "🩵";
+            heart.classList.add("heart");
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = Math.random() * 3 + 2 + "s";
+            document.body.appendChild(heart);
+
+            heart.addEventListener("click", () => {
+                score++;
+                document.getElementById("score").innerText = score + "/22";
+                heart.remove();
+
+                if (score >= heartsNeeded) {
+                    document.getElementById('game').style.display = "none";
+                    document.getElementById('question').style.display = "block";
+                }
+            });
+
+            setTimeout(() => {
+                heart.remove();
+                if (score < heartsNeeded) createHeart();
+            }, 5000);
+        }
+
+        function accept() {
+            document.getElementById('question').style.display = "none";
+            document.getElementById('finalMessage').style.display = "block";
+        }
+
+        function moveNo() {
+            let noBtn = document.getElementById("noBtn");
+            noBtn.style.position = "absolute";
+            noBtn.style.left = Math.random() * 80 + "vw";
+            noBtn.style.top = Math.random() * 80 + "vh";
+        }
+    </script>
+
+</body>
+</html>
